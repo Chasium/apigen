@@ -1,0 +1,29 @@
+type: http
+path: /room/list
+classes:
+  - name: RoomData
+    fields:
+      id:
+        type: int
+      users:
+        type: int
+  - name: ListRoomsRequest
+    fields:
+      session:
+        type: string
+        description: 会话ID
+  - name: ListRoomsResponse
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功， 1 - Session无效， 2 - 未知错误"
+      rooms:
+        type: list
+        item:
+          type: object
+          class: RoomData
+request: ListRoomsRequest
+response: ListRoomsResponse
+serverSolver:
+  package: http_api.room.list
+  function: list

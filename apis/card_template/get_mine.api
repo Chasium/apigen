@@ -1,0 +1,50 @@
+type: http
+path: /card-template/get-mine
+classes:
+  - name: CardTemplate
+    description: 人物卡模板
+    fields:
+      id:
+        type: int
+      name:
+        type: string
+      value:
+        type: string
+        description: 转换为json字符串的模板
+      scripts:
+        type: list
+        description: 模板使用的脚本列表
+        item:
+          type: string
+  - name: GetMyTemplatesRequest
+    description: 获取我的模板请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+      page:
+        type: int
+        description: 页码
+      pageSize:
+        type: int
+        description: 每页数量
+  - name: GetMyTemplatesResponse
+    description: 获取我的模板响应
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功， 1 - Session无效， 2 - 未知错误"
+      pages:
+        type: int
+        description: "页总数"
+      templates:
+        type: list
+        description: 获取的模板
+        item:
+          type: object
+          class: CardTemplate
+request: GetMyTemplatesRequest
+response: GetMyTemplatesResponse
+serverSolver:
+  package: http_api.card_template.get_mine
+  function: get_mine

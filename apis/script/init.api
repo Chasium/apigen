@@ -1,0 +1,65 @@
+type: ws
+classes:
+  - name: CardTemplate
+    description: 人物卡模板
+    fields:
+      id:
+        type: int
+      value:
+        type: string
+        description: 转换为json字符串的模板
+      scripts:
+        type: list
+        description: 模板使用的脚本列表
+        item:
+          type: string
+  - name: FakeFrontendConnectRequest
+    fields: {}
+  - name: FakeFrontendConnectResponse
+    fields:
+      session:
+        type: string
+  - name: InitGameEvent
+    fields:
+      roomId:
+        type: string
+      players:
+        type: list
+        item:
+          type: string
+      cards:
+        type: list
+        item:
+          type: string
+      template:
+        type: object
+        class: CardTemplate
+  - name: InitGameResult
+    fields:
+      roomId:
+        type: string
+      gameId:
+        type: int
+  - name: CleanGameEvent
+    fields:
+      gameId:
+        type: int
+  - name: CleanGameResult
+    fields: {}
+fromServer:
+  - name: script:on_connect
+    class: FakeFrontendConnectResponse
+  - name: script:init_game
+    class: InitGameEvent
+  - name: script:clean_game
+    class: CleanGameEvent
+fromClient:
+  - name: script:connect
+    class: FakeFrontendConnectRequest
+  - name: script:on_init_game
+    class: InitGameResult
+  - name: script:on_clean_game
+    class: CleanGameResult
+serverSolver:
+  package: ws_api.script.init
+  function: init

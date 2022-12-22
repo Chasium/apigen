@@ -1,0 +1,23 @@
+type: http
+path: /auth/register
+classes:
+  - name: RegisterRequest
+    description: 注册请求
+    fields:
+      userName:
+        type: string
+        description: 用户名
+      password:
+        type: string
+        description: 密码
+  - name: RegisterResponse
+    description: 注册响应
+    fields:
+      code:
+        type: int
+        description: "响应代码: 0 - register successfully, 10 - invaild username, 11 - user existed, 20 - invaild password, 21 - password unmatched, 404 - error"
+request: RegisterRequest
+response: RegisterResponse
+serverSolver:
+  package: http_api.auth.register
+  function: register

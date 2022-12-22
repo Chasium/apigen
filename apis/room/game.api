@@ -1,0 +1,136 @@
+type: ws
+classes:
+  - name: CardTemplate
+    description: 人物卡模板
+    fields:
+      id:
+        type: int
+      value:
+        type: string
+        description: 转换为json字符串的模板
+      scripts:
+        type: list
+        description: 模板使用的脚本列表
+        item:
+          type: string
+  - name: Card
+    description: 人物卡
+    fields:
+      id:
+        type: int
+      value:
+        type: string
+        description: 转换为json字符串的人物卡
+      templateId:
+        type: int
+        description: 人物卡的模板ID
+  - name: SetCardRequest
+    fields:
+      session:
+        type: string
+        description: 会话ID
+      cardId:
+        type: int
+        description: 要选择的人物卡ID
+  - name: SetCardResponse
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功，1 - Session无效，2 - 用户不在房间中，3 - 无法使用该人物卡，4 - 未知错误"
+      user:
+        type: string
+        description: "选择人物卡的用户名"
+      card:
+        type: string
+        description: 转为json的人物卡
+  - name: SetTemplateRequest
+    fields:
+      session:
+        type: string
+        description: 会话ID
+      templateId:
+        type: int
+        description: 人物卡模板ID
+  - name: SetTemplateResponse
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功，1 - Session无效，2 - 用户不在房间中，3 - 无权设置模板，4 - 模板不存在，5 - 未知错误"
+      template:
+        type: object
+        class: CardTemplate
+  - name: PrepareRequest
+    fields:
+      session:
+        type: string
+        description: 会话ID
+  - name: PrepareResponse
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功，1 - Session无效，2 - 用户不在房间中，3 - 已经准备，4 - 未知错误"
+      user:
+        type: string
+        description: "准备的用户名"
+  - name: StopPrepareRequest
+    fields:
+      session:
+        type: string
+        description: 会话ID
+  - name: StopPrepareResponse
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功，1 - Session无效，2 - 用户不在房间中，3 - 没有准备，4 - 未知错误"
+      user:
+        type: string
+        description: "取消准备的用户名"
+  - name: StartGameRequest
+    fields:
+      session:
+        type: string
+        description: "会话ID"
+  - name: StartGameResponse
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功，1 - Session无效，2 - 用户不在房间中，3 - 无法开始游戏，4 - 未知错误"
+  - name: EndGameRequest
+    fields:
+      session:
+        type: string
+        description: "会话ID"
+  - name: EndGameResponse
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功，1 - Session无效，2 - 用户不在房间中，3 - 无法结束游戏，4 - 未知错误"
+fromServer:
+  - name: room:on_set_card
+    class: SetCardResponse
+  - name: room:on_set_template
+    class: SetTemplateResponse
+  - name: room:on_prepare
+    class: PrepareResponse
+  - name: room:on_stop_prepare
+    class: StopPrepareResponse
+  - name: room:on_start
+    class: StartGameResponse
+  - name: room:on_end
+    class: EndGameResponse
+fromClient:
+  - name: room:set_card
+    class: SetCardRequest
+  - name: room:set_template
+    class: SetTemplateRequest
+  - name: room:prepare
+    class: PrepareRequest
+  - name: room:stop_prepare
+    class: StopPrepareRequest
+  - name: room:start
+    class: StartGameRequest
+  - name: room:end
+    class: EndGameRequest
+serverSolver:
+  package: ws_api.room.game
+  function: game

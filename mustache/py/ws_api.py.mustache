@@ -1,0 +1,17 @@
+{{# apis }}
+{{^ isHTTP }}
+{{# reqEvents }}
+from {{{ filePackage }}} import handle__{{{ pyEventName }}}
+{{/ reqEvents }}
+{{/ isHTTP }}
+{{/ apis }}
+
+__all__ = [
+{{# apis }}
+{{^ isHTTP }}
+{{# reqEvents }}
+    'handle__{{{ pyEventName }}}',
+{{/ reqEvents }}
+{{/ isHTTP }}
+{{/ apis }}
+]

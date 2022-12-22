@@ -1,0 +1,34 @@
+type: http
+path: /card-template/create
+classes:
+  - name: CreateTemplateRequest
+    description: 创建模板请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+      name:
+        type: string
+        description: 人物卡模板名称
+      template:
+        type: string
+        description: 转化为json字符串的模板
+      scripts:
+        type: list
+        description: 人物卡模板中的脚本
+        item:
+          type: string
+  - name: CreateTemplateResponse
+    description: 创建模板响应
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功，1 - Session无效，2 - 人物卡模板已存在，3 - 未知错误"
+      id:
+        type: int
+        description: "新建的人物卡模板ID"
+request: CreateTemplateRequest
+response: CreateTemplateResponse
+serverSolver:
+  package: http_api.card_template.create
+  function: create

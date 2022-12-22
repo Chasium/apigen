@@ -1,0 +1,13 @@
+{{# apis }}
+{{# isHTTP }}
+from {{{ filePackage }}} import handle_{{{ pyReqClass }}}
+{{/ isHTTP }}
+{{/ apis }}
+
+__all__ = [
+{{# apis }}
+{{# isHTTP }}
+    'handle_{{{ pyReqClass }}}',
+{{/ isHTTP }}
+{{/ apis }}
+]

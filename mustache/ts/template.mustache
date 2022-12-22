@@ -1,0 +1,17 @@
+{{# classes }}
+/**
+{{# description }}
+ * {{{ . }}}
+{{/ description }}
+ */
+export interface {{{ className }}} {
+{{# fields }}
+    /**
+{{# description }}
+     * {{{ . }}}
+{{/ description }}
+     */
+    {{{ tsName }}}: {{{ tsType }}}
+{{/ fields }}
+}
+{{/ classes }}

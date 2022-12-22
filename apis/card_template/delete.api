@@ -1,0 +1,23 @@
+type: http
+path: /card-template/delete
+classes:
+  - name: DeleteTemplateRequest
+    description: 删除模板请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+      id:
+        type: int
+        description: 人物卡模板ID
+  - name: DeleteTemplateResponse
+    description: 删除模板响应
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功，1 - Session无效，2 - 人物卡模板不存在，3 - 未知错误"
+request: DeleteTemplateRequest
+response: DeleteTemplateResponse
+serverSolver:
+  package: http_api.card_template.delete
+  function: delete

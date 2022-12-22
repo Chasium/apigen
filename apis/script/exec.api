@@ -1,0 +1,58 @@
+type: ws
+classes:
+  - name: EditCardEvent
+    fields:
+      user:
+        type: string
+        description: 要修改人物卡的用户名
+      propertyId:
+        type: int
+        description: 要修改人物卡的属性ID
+      newValue:
+        type: any
+        description: 要修改的新值
+  - name: EditCardResult
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功，1 - Session无效，2 - 用户不在房间中，3 - 无权修改，4 - 未知错误"
+      card:
+        type: string
+        description: 经过修改的转化为json的人物卡
+      roomId:
+        type: string
+      user:
+        type: string
+  - name: ExecScriptEvent
+    fields:
+      user:
+        type: string
+        description: 要修改人物卡的用户名
+      scriptId:
+        type: int
+        description: 要执行的脚本ID
+  - name: ExecScriptResult
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功，1 - Session无效，2 - 用户不在房间中，3 - 无权执行，4 - 未知错误"
+      card:
+        type: string
+        description: 经过修改的转化为json的人物卡
+      roomId:
+        type: string
+      user:
+        type: string
+fromServer:
+  - name: script:edit_card
+    class: EditCardEvent
+  - name: script:exec
+    class: ExecScriptEvent
+fromClient:
+  - name: script:on_edit_card
+    class: EditCardResult
+  - name: script:on_exec
+    class: ExecScriptResult
+serverSolver:
+  package: ws_api.script.exec
+  function: exec

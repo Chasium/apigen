@@ -1,0 +1,19 @@
+type: ws
+classes:
+  - name: WsConnectRequest
+    fields:
+      session:
+        type: string
+  - name: WsConnectResponse
+    fields:
+      code:
+        type: int
+fromServer:
+  - name: ws:on_connect
+    class: WsConnectResponse
+fromClient:
+  - name: ws:connect
+    class: WsConnectRequest
+serverSolver:
+  package: ws_api.ws.connect
+  function: connect

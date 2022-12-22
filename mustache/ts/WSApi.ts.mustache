@@ -1,0 +1,94 @@
+import { io } from 'socket.io-client';
+
+{{# apis }}
+{{^ isHTTP }}
+import type {
+{{# reqEvents }}
+    {{{ className }}},
+{{/ reqEvents }}
+{{# resEvents }}
+    {{{ className }}},
+{{/ resEvents }}
+} from './generated{{{ filePath }}}'
+{{/ isHTTP }}
+{{/ apis }}
+
+const FROM_CLIENT = {
+{{# apis }}
+{{^ isHTTP }}
+{{# reqEvents }}
+    '{{{ eventName }}}': null as unknown as {{{ className }}},
+{{/ reqEvents }}
+{{/ isHTTP }}
+{{/ apis }}
+};
+
+const FROM_SERVER = {
+{{# apis }}
+{{^ isHTTP }}
+{{# resEvents }}
+    '{{{ eventName }}}': null as unknown as {{{ className }}},
+{{/ resEvents }}
+{{/ isHTTP }}
+{{/ apis }}
+};
+
+type ClientApis = keyof typeof FROM_CLIENT;
+type ServerApis = keyof typeof FROM_SERVER;
+
+type Req<T extends ClientApis> = typeof FROM_CLIENT[T];
+type Res<T extends ServerApis> = typeof FROM_SERVER[T];
+
+export class WSApi {
+    private socket;
+    public connected: Boolean = false;
+    constructor(session: string) {
+        this.socket = io('http://127.0.0.1:5000/main', { autoConnect: false });
+        this.socket.on('connect', () => {
+            console.log(this.socket.connected);
+            this.emitToSocket('ws:connect', {
+                session: session,
+            });
+        });
+    }
+
+    emitToSocket<T extends ClientApis>(event: T, data: Req<T>) {
+        console.log('Event emitted:', event);
+        console.log('args:', data);
+        this.socket.emit(event, data);
+    }
+
+    subscribe<T extends ServerApis>(
+        event: T,
+        listener: (data: Res<T>) => void
+    ) {
+        console.log('Event subscribed:', event);
+        this.socket.on(event, listener as any);
+    }
+
+    unsubscribe<T extends ServerApis>(
+        event: T,
+        listener: (data: Res<T>) => void
+    ) {
+        console.log('Event', event, 'unsubscribed');
+        this.socket.off(event, listener as any);
+    }
+
+    public connect() {
+        this.socket.connect();
+        this.connected = this.socket.connected;
+    }
+
+    public disconnect() {
+        this.socket.disconnect();
+        this.connected = this.socket.connected;
+    }
+
+    public getSocketID(): string {
+        if (this.socket.connected) {
+            return this.socket.id;
+        } else {
+            return 'undefined';
+        }
+    }
+}

@@ -1,0 +1,54 @@
+from typing import List, Any
+from flask import Request, request
+from http_api import http_api
+
+
+{{# classes }}
+class {{{ className }}}:
+    """
+{{# description }}
+    {{{ . }}}
+{{/ description }}
+    """
+{{# fields }}
+{{# description }}
+    # {{{ . }}}
+{{/ description }}
+    {{{ pyName }}}: {{{ pyType }}}
+    __res__{{{ pyName }}}: {{{ pyType }}}
+    def solve__{{{ pyName }}}(self, value: {{{ pyType }}}):
+        self.__res__{{{ pyName }}} = value
+
+{{/ fields }}
+    def __init__(self):
+        pass
+
+    @classmethod
+    def from_request(self, request: Request):
+        out = self()
+        data = request.json
+{{# fields }}
+{{{ pyConstructor }}}
+{{/ fields }}
+        return out
+
+    def to_json(self):
+        out = {}
+{{# fields }}
+        try:
+{{{ pyToJson }}}
+        except AttributeError:
+            out['{{{ tsName }}}'] = None
+{{/ fields }}
+        return out
+
+
+{{/ classes }}
+
+
+from {{{ solverPackage }}} import {{{ solverFunction }}} as solver__function
+
+
+@http_api.route('{{{ apiPath }}}', methods=['POST'])
+def handle_{{{ pyReqClass }}}():
+    return solver__function({{{ reqClass }}}.from_request(request)).to_json()

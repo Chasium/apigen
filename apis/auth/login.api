@@ -1,0 +1,26 @@
+type: http
+path: /auth/login
+classes:
+  - name: LoginRequest
+    description: 登录请求
+    fields:
+      userName:
+        type: string
+        description: 用户名
+      password:
+        type: string
+        description: 密码
+  - name: LoginResponse
+    description: 登录响应
+    fields:
+      code:
+        type: int
+        description: "响应代码: 0 - login successfully, 1 - user not found, 2 - wrong password, 3 - login already, 404 - error"
+      session:
+        type: string
+        description: 会话ID
+serverSolver:
+  package: http_api.auth.login
+  function: login
+request: LoginRequest
+response: LoginResponse

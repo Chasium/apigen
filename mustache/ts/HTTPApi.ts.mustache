@@ -1,0 +1,34 @@
+import axios from 'axios';
+
+{{# apis }}
+{{# isHTTP }}
+import type { {{{ reqClass }}}, {{{ resClass }}} } from './generated{{{ filePath }}}';
+{{/ isHTTP }}
+{{/ apis }}
+
+interface API<Q, S> {
+    req: Q;
+    res: S;
+}
+
+const API_DICT = {
+{{# apis }}
+{{# isHTTP }}
+    '{{{ apiPath }}}': null as unknown as API<{{{ reqClass }}}, {{{ resClass }}}>,
+{{/ isHTTP }}
+{{/ apis }}
+};
+
+type Apis = keyof typeof API_DICT;
+type Req<T extends Apis> = typeof API_DICT[T] extends API<infer Q, any>
+    ? Q
+    : undefined;
+type Res<T extends Apis> = typeof API_DICT[T] extends API<any, infer S>
+    ? S
+    : undefined;
+
+export class HTTPApi {
+    static async post<T extends Apis>(path: T, data: Req<T>): Promise<Res<T>> {
+        return (await axios.post<Res<T>>(path, data)).data;
+    }
+}

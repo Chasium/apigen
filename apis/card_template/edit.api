@@ -1,0 +1,31 @@
+type: http
+path: /card-template/edit
+classes:
+  - name: EditTemplateRequest
+    description: 编辑模板请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+      id:
+        type: int
+        description: 人物卡模板ID
+      template:
+        type: string
+        description: 转化为json字符串的模板
+      scripts:
+        type: list
+        description: 人物卡模板中的脚本
+        item:
+          type: string
+  - name: EditTemplateResponse
+    description: 编辑模板响应
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功，1 - Session无效，2 - 人物卡模板不存在，3 - 未知错误"
+request: EditTemplateRequest
+response: EditTemplateResponse
+serverSolver:
+  package: http_api.card_template.edit
+  function: edit

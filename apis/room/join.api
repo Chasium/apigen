@@ -1,0 +1,73 @@
+type: ws
+classes:
+  - name: JoinRoomRequest
+    description: 加入房间请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+      room:
+        type: string
+        description: 房间ID
+  - name: JoinRoomResponse
+    description: 加入房间响应
+    fields:
+      code:
+        type: int
+        description: "响应代码: 0 - 成功，1 - Session无效，2 - 房间不存在，3 - 已加入房间，4 - 未知错误"
+      users:
+        type: list
+        description: 房间中现有用户列表
+        item:
+          type: string
+      host:
+        type: string
+  - name: CreateRoomRequest
+    description: 创建房间请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+  - name: CreateRoomResponse
+    description: 创建房间响应
+    fields:
+      code:
+        type: int
+        description: "响应代码: 0 - 成功，1 - Session无效，2 - 已加入房间，3 - 未知错误"
+      roomId:
+        type: string
+        description: 房间ID
+  - name: QuitRoomRequest
+    description: 退出房间请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+  - name: QuitRoomResponse
+    description: 退出房间响应
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功，1 - Session无效，2 - 未加入房间，3 - 未知错误"
+      user:
+        type: string
+        description: 退出房间的用户名
+
+fromServer:
+  - name: room:on_new
+    class: CreateRoomResponse
+  - name: room:on_join
+    class: JoinRoomResponse
+  - name: room:on_quit
+    class: QuitRoomResponse
+
+fromClient:
+  - name: room:new
+    class: CreateRoomRequest
+  - name: room:join
+    class: JoinRoomRequest
+  - name: room:quit
+    class: QuitRoomRequest
+serverSolver:
+  package: ws_api.room.join
+  function: join

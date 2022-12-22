@@ -1,0 +1,57 @@
+type: ws
+classes:
+  - name: DrawRequest
+    fields:
+      session:
+        type: string
+      x:
+        type: int
+      y:
+        type: int
+      color:
+        type: int
+      type:
+        type: int
+  - name: DrawResponse
+    fields:
+      x:
+        type: int
+      y:
+        type: int
+      color:
+        type: int
+      type:
+        type: int
+  - name: ClearRequest
+    fields:
+      session:
+        type: string
+  - name: ClearResponse
+    fields: {}
+  - name: UpdateBgRequest
+    fields:
+      session:
+        type: string
+      src:
+        type: string
+  - name: UpdateBgResponse
+    fields:
+      src:
+        type: string
+fromServer:
+  - name: room:on_draw
+    class: DrawResponse
+  - name: room:on_clear_map
+    class: ClearResponse
+  - name: room:on_update_bg
+    class: UpdateBgResponse
+fromClient:
+  - name: room:draw
+    class: DrawRequest
+  - name: room:clear_map
+    class: ClearRequest
+  - name: room:update_bg
+    class: UpdateBgRequest
+serverSolver:
+  package: ws_api.room.draw
+  function: draw

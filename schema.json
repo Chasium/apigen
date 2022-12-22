@@ -1,0 +1,205 @@
+{
+    "title": "APIGen",
+    "description": "生成用于Chasium的API",
+    "type": "object",
+    "definitions": {
+        "class": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "pattern": "^([A-Z][a-z0-9]*)*[A-Z][a-z0-9]*$",
+                    "description": "该类的类名"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "该类的描述"
+                },
+                "fields": {
+                    "$ref": "#/definitions/classProperties"
+                }
+            },
+            "required": ["name", "fields"]
+        },
+        "classProperties": {
+            "type": "object",
+            "patternProperties": {
+                "^[a-z0-9]+([A-Z][a-z0-9]*)*$": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/basic"
+                        },
+                        {
+                            "$ref": "#/definitions/list"
+                        },
+                        {
+                            "$ref": "#/definitions/object"
+                        }
+                    ]
+                }
+            }
+        },
+        "basic": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "该属性的类型",
+                    "enum": ["int", "float", "string", "boolean", "any"]
+                },
+                "description": {
+                    "type": "string",
+                    "description": "该属性的描述"
+                }
+            },
+            "required": ["type"]
+        },
+        "list": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "该属性的类型",
+                    "enum": ["list"]
+                },
+                "description": {
+                    "type": "string",
+                    "description": "该属性的描述"
+                },
+                "item": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/basic"
+                        },
+                        {
+                            "$ref": "#/definitions/list"
+                        },
+                        {
+                            "$ref": "#/definitions/object"
+                        }
+                    ],
+                    "description": "该列表的元素类型"
+                }
+            },
+            "required": ["type", "item"]
+        },
+        "object": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "该属性的类型",
+                    "enum": ["object"]
+                },
+                "description": {
+                    "type": "string",
+                    "description": "该属性的描述"
+                },
+                "class": {
+                    "type": "string",
+                    "description": "该对象的类名"
+                }
+            },
+            "required": ["type", "class"]
+        }
+    },
+    "properties": {
+        "type": {
+            "type": "string",
+            "enum": ["http", "ws"],
+            "description": "该API的类型"
+        },
+        "classes": {
+            "type": "array",
+            "description": "该API的所有类",
+            "items": {
+                "$ref": "#/definitions/class"
+            }
+        },
+        "serverSolver": {
+            "type": "object",
+            "description": "服务端用于处理该API的函数",
+            "properties": {
+                "package": {
+                    "type": "string",
+                    "pattern": "^(([a-z0-9]+_)*[a-z0-9]+\\.)*([a-z0-9]+_)*[a-z0-9]+$",
+                    "description": "函数的包名"
+                },
+                "function": {
+                    "type": "string",
+                    "pattern": "^([a-z0-9]+_)*[a-z0-9]+$",
+                    "description": "函数名"
+                }
+            },
+            "required": ["package", "function"]
+        }
+    },
+    "required": ["type", "classes", "serverSolver"],
+    "if": {
+        "properties": {
+            "type": {
+                "type": "string",
+                "enum": ["http"]
+            }
+        }
+    },
+    "then": {
+        "properties": {
+            "path": {
+                "type": "string",
+                "description": "该API的路径",
+                "pattern": "^(/([a-z0-9]+-)*[a-z0-9]+)*([a-z0-9]+-)*[a-z0-9]+$"
+            },
+            "request": {
+                "type": "string",
+                "description": "请求的主类类名"
+            },
+            "response": {
+                "type": "string",
+                "description": "响应的主类类名"
+            }
+        },
+        "required": ["type", "classes", "path", "serverSolver", "request", "response"]
+    },
+    "else": {
+        "properties": {
+            "fromClient": {
+                "type": "array",
+                "description": "从客户端发送的事件",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "description": "事件名"
+                        },
+                        "class": {
+                            "type": "string",
+                            "description": "事件的主类类名"
+                        }
+                    },
+                    "required": ["name", "class"]
+                }
+            },
+            "fromServer": {
+                "type": "array",
+                "description": "从服务端发送的事件",
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "description": "事件名"
+                        },
+                        "class": {
+                            "type": "string",
+                            "description": "事件的主类类名"
+                        }
+                    },
+                    "required": ["name", "class"]
+                }
+            }
+        },
+        "required": ["type", "classes", "serverSolver", "fromClient", "fromServer"]
+    }
+}

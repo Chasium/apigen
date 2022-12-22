@@ -1,0 +1,79 @@
+from typing import List, Any
+from flask import Request, request
+from ws_api import ws_api
+from flask_socketio import emit
+
+
+{{# classes }}
+class {{{ className }}}:
+    """
+{{# description }}
+    {{{ . }}}
+{{/ description }}
+    """
+{{# fields }}
+{{# description }}
+    # {{{ . }}}
+{{/ description }}
+    {{{ pyName }}}: {{{ pyType }}}
+    __res__{{{ pyName }}}: {{{ pyType }}}
+    def solve__{{{ pyName }}}(self, value: {{{ pyType }}}):
+        self.__res__{{{ pyName }}} = value
+
+{{/ fields }}
+    def __init__(self):
+        pass
+
+    @classmethod
+    def from_request(self, data: dict):
+        out = self()
+{{# fields }}
+{{{ pyConstructor }}}
+{{/ fields }}
+        return out
+
+    def to_json(self):
+        out = {}
+{{# fields }}
+        try:
+{{{ pyToJson }}}
+        except AttributeError:
+            out['{{{ tsName }}}'] = None
+{{/ fields }}
+        return out
+
+{{# isRes }}
+    def emit_back(self):
+        out = {}
+{{# fields }}
+        try:
+{{{ pyToJson }}}
+        except AttributeError:
+            out['{{{ tsName }}}'] = None
+{{/ fields }}
+        emit('{{{ eventName }}}', out, namespace='/main');
+
+    def emit_to_room(self, room: str):
+        out = {}
+{{# fields }}
+        try:
+{{{ pyToJson }}}
+        except AttributeError:
+            out['{{{ tsName }}}'] = None
+{{/ fields }}
+        emit('{{{ eventName }}}', out, namespace='/main', to=room)
+{{/ isRes }}
+
+
+{{/ classes }}
+
+
+from {{{ solverPackage }}} import {{{ solverFunction }}} as solver__function
+
+{{# classes }}
+{{# isReq }}
+@ws_api.on('{{{ eventName }}}', namespace='/main')
+def handle__{{{ pyEventName }}}(data: dict):
+    solver__function({{{ className }}}.from_request(data))
+{{/ isReq }}
+{{/ classes }}

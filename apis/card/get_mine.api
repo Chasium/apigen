@@ -1,0 +1,48 @@
+type: http
+path: /card/get-mine
+classes:
+  - name: Card
+    description: 人物卡
+    fields:
+      id:
+        type: int
+      name:
+        type: string
+      value:
+        type: string
+        description: 转换为json字符串的人物卡
+      templateId:
+        type: int
+        description: 人物卡的模板ID
+  - name: GetMyCardsRequest
+    description: 获取我的人物卡请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+      page:
+        type: int
+        description: 页码
+      pageSize:
+        type: int
+        description: 每页数量
+  - name: GetMyCardsResponse
+    description: 获取我的人物卡响应
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功， 1 - Session无效， 2 - 未知错误"
+      pages:
+        type: int
+        description: 页总数
+      cards:
+        type: list
+        description: 获取的人物卡
+        item:
+          type: object
+          class: Card
+request: GetMyCardsRequest
+response: GetMyCardsResponse
+serverSolver:
+  package: http_api.card.get_mine
+  function: get_mine

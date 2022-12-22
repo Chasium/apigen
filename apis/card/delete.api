@@ -1,0 +1,23 @@
+type: http
+path: /card/delete
+classes:
+  - name: DeleteCardRequest
+    description: 删除人物卡请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+      id:
+        type: int
+        description: 人物卡ID
+  - name: DeleteCardResponse
+    description: 删除人物卡响应
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功，1 - Session无效，2 - 人物卡不存在，3 - 未知错误"
+request: DeleteCardRequest
+response: DeleteCardResponse
+serverSolver:
+  package: http_api.card.delete
+  function: delete
