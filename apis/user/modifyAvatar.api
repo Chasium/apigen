@@ -1,0 +1,23 @@
+type: http
+path: /user/modifyAvatar
+classes:
+  - name: modifyAvatarRequest
+    description: 修改头像请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+      img:
+        type: string
+        description: base64编码后的头像
+  - name: modifyAvatarResponse
+    description: 修改头像响应
+    fields:
+      code:
+        type: int
+        description: "响应代码: 0 - login successfully, 1 - user not found, 2 - wrong password, 3 - login already, 404 - error"
+serverSolver:
+  package: http_api.user.modifyAvatar
+  function: uploadImage
+request: modifyAvatarRequest
+response: modifyAvatarResponse

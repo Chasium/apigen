@@ -1,0 +1,23 @@
+type: http
+path: /user/get-my-info
+classes:
+  - name: GetMyInfoRequest
+    description: 获取我的头像请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+  - name: GetMyInfoResponse
+    description: 获取我的头像响应
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功， 1 - Session无效， 2 - 未知错误"
+      img:
+        type: string
+        description: base64编码后的头像
+request: GetMyInfoRequest
+response: GetMyInfoResponse
+serverSolver:
+  package: http_api.user.get_my_info
+  function: getMyInfo
