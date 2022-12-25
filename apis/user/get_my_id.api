@@ -1,0 +1,23 @@
+type: http
+path: /user/get-id
+classes:
+  - name: getIdRequest
+    description: 获得id请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+  - name: getIdResponse
+    description: 获得id响应
+    fields:
+      code:
+        type: int
+        description: "响应代码: 0 - login successfully, 1 - user not found, 2 - wrong password, 3 - login already, 404 - error"
+      id:
+        type: string
+        description: 该用户的id
+serverSolver:
+  package: http_api.user.get_my_id
+  function: getMyId
+request: getIdRequest
+response: getIdResponse

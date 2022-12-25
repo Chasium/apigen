@@ -1,0 +1,23 @@
+type: http
+path: /user/modify-name
+classes:
+  - name: modifyNameRequest
+    description: 获得id请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+      newName:
+        type: string
+        description: 修改的新名称
+  - name: modifyNameResponse
+    description: 获得id响应
+    fields:
+      code:
+        type: int
+        description: "响应代码: 0 - login successfully, 1 - user not found, 2 - wrong password, 3 - login already, 404 - error"
+serverSolver:
+  package: http_api.user.modify_name
+  function: modifyName
+request: modifyNameRequest
+response: modifyNameResponse
