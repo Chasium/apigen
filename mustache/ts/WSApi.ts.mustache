@@ -43,7 +43,7 @@ export class WSApi {
     private socket;
     public connected: Boolean = false;
     constructor(session: string) {
-        this.socket = io('http://127.0.0.1:5000/main', { autoConnect: false });
+        this.socket = io('http://{{# production }}backend'{{/ production }}{{^ production }}127.0.0.1{{/ production }}:5000/main, { autoConnect: false });
         this.socket.on('connect', () => {
             console.log(this.socket.connected);
             this.emitToSocket('ws:connect', {

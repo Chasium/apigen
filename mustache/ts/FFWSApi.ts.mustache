@@ -42,8 +42,12 @@ type Res<T extends ServerApis> = typeof FROM_SERVER[T];
 export class FFWSApi {
     private socket;
     public connected: Boolean = false;
-    constructor(session: string) {
-        this.socket = io('http://127.0.0.1:5000/main', { autoConnect: false });
+    public session = '';
+    constructor() {
+        this.socket = io('http://{{# production }}backend'{{/ production }}{{^ production }}127.0.0.1{{/ production }}:5000/main, { autoConnect: false });
+        this.socket.on('script:on_connect', (data: any) => {
+            this.session = data.session as string;
+        });
         this.socket.on('connect', () => {
             console.log(this.socket.connected);
             this.emitToSocket('script:connect', {});
