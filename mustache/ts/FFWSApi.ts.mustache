@@ -44,7 +44,7 @@ export class FFWSApi {
     public connected: Boolean = false;
     public session = '';
     constructor() {
-        this.socket = io('http://{{# production }}backend'{{/ production }}{{^ production }}127.0.0.1{{/ production }}:5000/main, { autoConnect: false });
+        this.socket = io('http://{{# production }}backend{{/ production }}{{^ production }}127.0.0.1{{/ production }}:5000/main', { autoConnect: false });
         this.socket.on('script:on_connect', (data: any) => {
             this.session = data.session as string;
         });
