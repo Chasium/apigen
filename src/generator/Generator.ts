@@ -18,11 +18,14 @@ export class Generator {
     private generateTs(reader: Reader, gatherer: Gatherer) {
         const httpApi = mustache.render(reader.mustache.ts.httpApi, gatherer.data);
         const wsApi = mustache.render(reader.mustache.ts.wsApi, gatherer.data);
+        const ffwsApi = mustache.render(reader.mustache.ts.ffwsApi, gatherer.data);
         const index = mustache.render(reader.mustache.ts.index, gatherer.data);
         fs.writeFileSync(path.resolve(`${this.tsPath}/HTTPApi.ts`), httpApi);
         console.log('Generated', `${this.tsPath}/HTTPApi.ts`);
         fs.writeFileSync(path.resolve(`${this.tsPath}/WSApi.ts`), wsApi);
         console.log('Generated', `${this.tsPath}/WSApi.ts`);
+        fs.writeFileSync(path.resolve(`${this.tsPath}/FFWSApi.ts`), ffwsApi);
+        console.log('Generated', `${this.tsPath}/FFWSApi.ts`);
         fs.writeFileSync(path.resolve(`${this.tsPath}/index.ts`), index);
         console.log('Generated', `${this.tsPath}/index.ts`);
         gatherer.data.apis.forEach((data) => {

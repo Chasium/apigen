@@ -9,6 +9,7 @@ interface MustacheFiles {
         index: string;
         template: string;
         wsApi: string;
+        ffwsApi: string;
     };
     py: {
         httpApi: string;
@@ -32,6 +33,7 @@ export class Reader {
             ts: {
                 httpApi: fs.readFileSync(`${mustacheRoot}/ts/HTTPApi.ts.mustache`).toString(),
                 wsApi: fs.readFileSync(`${mustacheRoot}/ts/WSApi.ts.mustache`).toString(),
+                ffwsApi: fs.readFileSync(`${mustacheRoot}/ts/FFWSApi.ts.mustache`).toString(),
                 template: fs.readFileSync(`${mustacheRoot}/ts/template.mustache`).toString(),
                 index: fs.readFileSync(`${mustacheRoot}/ts/index.ts.mustache`).toString(),
             },
