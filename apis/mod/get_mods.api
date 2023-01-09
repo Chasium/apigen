@@ -1,0 +1,47 @@
+type: http
+path: /mod/get-mods
+classes:
+  - name: Mod
+    description: 剧本
+    fields:
+      id:
+        type: int
+        description: ID 
+      name:
+        type: string
+        description: 剧本名称
+      content:
+        type: string
+        description: 剧本内容
+  - name: GetMyModsRequest
+    description: 获取我的剧本请求
+    fields:
+      session:
+        type: string
+        description: 会话ID
+      page:
+        type: int
+        description: 页码
+      pageSize:
+        type: int
+        description: 每页数量
+  - name: GetMyModsResponse
+    description: 获取我的剧本响应
+    fields:
+      code:
+        type: int
+        description: "响应码: 0 - 成功， 1 - Session无效， 2 - 未知错误"
+      pages:
+        type: int
+        description: 页总数
+      mods:
+        type: list
+        description: 获取的剧本
+        item:
+          type: object
+          class: Mod
+request: GetMyModsRequest
+response: GetMyModsResponse
+serverSolver:
+  package: http_api.mod.get_mods
+  function: get_mods
