@@ -21,6 +21,6 @@ const inProduction = opts['production'] as boolean;
 
 const reader = new Reader(api, mustache);
 const gatherer = new Gatherer(reader.apiRaws);
-gatherer.data.inProduction = inProduction;
+gatherer.data.production = inProduction;
 const generator = new Generator(ts, py);
 generator.generate(reader, gatherer);

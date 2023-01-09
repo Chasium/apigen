@@ -2,12 +2,12 @@ import type { ApiData, Class, Event, Field, RawClass, RawField } from '../data';
 import type { RawDataWithPath } from './Reader';
 
 interface ApiDataWrapper {
-    inProduction: boolean;
+    production: boolean;
     apis: ApiData[];
 }
 
 export class Gatherer {
-    readonly data: ApiDataWrapper = { apis: [], inProduction: false };
+    readonly data: ApiDataWrapper = { apis: [], production: false };
     constructor(raw: RawDataWithPath[]) {
         raw.forEach((data) => {
             const fileFull = `${data.path}/${data.name.replace(/\.apiData/, '')}`;
